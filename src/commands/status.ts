@@ -8,6 +8,7 @@ import { isTerminal } from "../job/job.ts";
 import { type JobRecord, noteKind } from "../job/view.ts";
 import { limenRoot, unlandedBranches, workspaceRepository, workspaceRoot } from "../project/git.ts";
 import { confirmDeadJobs } from "../runtime/reap.ts";
+import { COMPLAINTS, openComplaints } from "./complain.ts";
 import { RECENT_MS, renderJobDirectory, shownState } from "./jobs.ts";
 
 const text = (path: string) =>
@@ -107,6 +108,7 @@ export async function statusCommand(args: readonly string[], cwd: string): Promi
 		scan.originTabs,
 	);
 	const refused = await text(`${root}/.limen/webhook-rejected`);
+	const complaints = openComplaints(root);
 	console.log(
 		[
 			`Plant ${root}`,
@@ -120,6 +122,7 @@ export async function statusCommand(args: readonly string[], cwd: string): Promi
 			`Needs a decision (${decide.length}):`,
 			...(decide.length ? decide : ["  none"]),
 			...(scan.uncertain.length ? ["Unconfirmed jobs:", ...scan.uncertain] : []),
+			...(complaints ? [`Complaints (${complaints} open): ${COMPLAINTS}`] : []),
 			...(all ? [] : [`Older: ${scan.older} record${scan.older === 1 ? "" : "s"} (limen status --all)`]),
 			"Coordinator tabs:",
 			...coordinators,

@@ -15,6 +15,10 @@ const REMINDERS = ".agents/limen/reminders.md";
 // One "Note check" line: `<check>: <mark>`, then the evidence or the gap. Proven and followed close an item.
 const MARKED = /^(.+?):\s*(not proven|proven|changed|dropped|followed|broken)\b[\s.,;:]*(.*)$/i;
 const SHOWN = 10;
+// Fork addition (nexty5870/limen), not part of the F950 wording: one question before every finish.
+export const COMPLAIN_ASK =
+	"Did anything about the system annoy you during this job? If yes, run " +
+	'`limen complain "<one sentence>"` once per annoyance before you finish. If no, write nothing.';
 const FORMAT = [
 	"Write a plan, not a task copy or a result log. Use plain technical English. Aim for six lines in three parts:",
 	'- Done means: two to four end checks. Each line states what must be true, then "Shown by:" and the command or ' +
@@ -100,6 +104,7 @@ export function noteCheck(jobDir: string, finishTool: boolean): string {
 			: []),
 		"Do not repeat a run-once check or run a forbidden check to clear the note. " +
 			"Report any remaining gap without claiming completion.",
+		COMPLAIN_ASK,
 		...(finishTool ? ['Then call finish again. Its handoff is that whole final message, with the "Note check".'] : []),
 	].join("\n");
 }
