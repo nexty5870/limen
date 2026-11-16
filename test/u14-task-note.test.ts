@@ -49,7 +49,7 @@ test("a job's note shows once, keeps its first version, logs changes, and is che
 	const detached = load(limenFinish);
 	const ask = detached.call("agent_before_settle", { outcome: "completed", entries: [] })?.entries?.[0]?.content ?? "";
 	assert.match(ask, /^\[limen\] Your note now:\n- a\.\nChanged: b\. Reason: c\.\nYour note at the start:\n- a\.\n/);
-	assert.match(ask, /\nProject reminders:\n- R\.\nCompare the note .*\nReport each binding .*completion\.$/s);
+	assert.match(ask, /\nProject reminders:\n- R\.\nCompare .*\nReport each .*completion\.\nDid anything .*nothing\.$/s);
 	assert.equal(detached.call("agent_before_settle", { outcome: "completed", entries: [] }), undefined);
 	assert.equal(await detached.end("handoff"), "done");
 	// Hosted: the first finish answers with the check and ends nothing; a missing note is rebuilt from the task.
@@ -59,7 +59,7 @@ test("a job's note shows once, keeps its first version, logs changes, and is che
 	assert.equal(hosted.handlers.has("agent_before_settle") || hosted.handlers.has("session_stop"), false);
 	const rebuild = (await hosted.end("early")) ?? "";
 	assert.ok(rebuild.startsWith(`[limen] No note exists in ${job}/note.md. Read ${job}/task.md and reconstruct`));
-	assert.match(rebuild, /^\[limen\] No note .*\nCompare .*\nGive .*\nDo not repeat .*\nThen call finish again\. .*$/);
+	assert.match(rebuild, /^\[limen\] No note .*\nCompare .*\nGive .*\nDo not .*\nDid anything .*\nThen call finish .*$/);
 	assert.deepEqual([await readFile(join(job, "result"), "utf8"), await hosted.end("final")], ["handoff\n", "done"]);
 	assert.equal((await readFile(join(job, "log"), "utf8")).split("] note check sent\n").length, 3);
 	// A sent check left unanswered is open. A proven command counts only from a bash call that a real shell ended with

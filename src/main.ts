@@ -1,5 +1,6 @@
 import { boardCommand } from "./commands/board-view.ts";
 import { closeCommand } from "./commands/close.ts";
+import { complainCommand } from "./commands/complain.ts";
 import { continueCommand } from "./commands/continue.ts";
 import { diffCommand } from "./commands/diff.ts";
 import { githubCommand } from "./commands/github.ts";
@@ -56,6 +57,7 @@ const COMMANDS = {
 	open: openCommand,
 	picture: pictureCommand,
 	close: closeCommand,
+	complain: complainCommand,
 	sweep: sweepCommand,
 	highlight: highlightCommand,
 	linear: linearCommand,
@@ -87,6 +89,7 @@ const COMMANDS = {
 	| "open"
 	| "picture"
 	| "close"
+	| "complain"
 	| "sweep"
 	| "highlight"
 	| "linear"
@@ -136,6 +139,7 @@ usage:
   limen unwatch <id|suffix|label> | --all
   limen open <id|suffix|label>
   limen close <FNNN>
+  limen complain "one sentence"                  # append what got in the way to the plant's spec/complain.md; never commits
   limen ticket-author <ticket-path>                 # creation-commit author, following Git renames
   limen ticket new "what becomes true" [--lane planned|active] [--touches id,id]  # next unused F number across lanes, archive.tsv, limen/* branches, job labels and the plant's series
   limen ticket check [BRANCH]                    # land gate on demand: tickets BRANCH adds or changes; run before a hand git merge

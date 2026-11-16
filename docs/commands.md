@@ -132,6 +132,18 @@ limen rule end NAME [reason]
 
 A rule is one record per name under the Limen home (`~/.limen/rules/NAME/`, or `$LIMEN_HOME/.limen/rules/NAME/`): the text, the end time, who set it, the start priority, and one receipt per pinged tab. `--until` takes a duration, a local date and time, or an ISO time with a zone. Setting a name that holds is a change. A set, a change and an end each send one `herdr agent prompt` to every live coordinator tab: a registration under `<project>/.limen/coordinators/` in a project of the seat registry, with a live process and no shutdown mark, the newest one on each pane. The pane that ran the command is one of them. A text that may have reached a pane is never sent again. A detached timer ends the rule once at its end time and pings every live tab with what the rule held. When that timer died, the next `limen` command run where Herdr is reachable starts a new one. A rule that holds is shown in each coordinator's turn context and at the top of `limen board`; it never enters `spec/build.md`. While a rule with `--start-priority N` holds, the start queue starts only detached jobs at priority N or more urgent; see [Priority budget](jobs.md#start-queue).
 
+### Complaints
+
+Record what got in the way, one sentence per annoyance. This command is a fork addition (`nexty5870/limen`).
+
+```text
+limen complain "one sentence"
+```
+
+The command appends one line to `spec/complain.md` in the plant: `- YYYY-MM-DD HH:MM UTC · job <id> · #<plant> · <sentence>`. A coordinator writes `coordinator` and a person writes `by hand` in place of `job <id>`. A job writes to its plant root (`LIMEN_CONTEXT_ROOT`), and a coordinator in its own worktree writes to the primary checkout, so the log never enters a job branch. A lock keeps lines from jobs that finish together whole. Line breaks become spaces, `→` becomes `->`, and a sentence over 400 characters is cut. Only an empty sentence fails. The command never commits.
+
+Every job meets the question before its finish, in the same turn as the note check. The coordinator triages the log: it ends a handled line with ` → FNNN` or ` → won't fix: <reason>` and commits the file. `limen status` shows `Complaints (N open)` while any line has no mark.
+
 ### Map build and refresh
 
 Build the architecture map, serve it with live job activity, or do one quiet refresh pass.
